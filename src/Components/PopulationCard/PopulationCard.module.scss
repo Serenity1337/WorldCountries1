@@ -1,0 +1,24 @@
+.populationContainer {
+  background-color: #f0f0f0;
+  padding: 20px 400px;
+  .dataContainer {
+    display: flex;
+    margin: 10px 0px;
+    .populationBarContainer {
+      width: 100%;
+
+      margin: 0px 50px;
+      .populationBar {
+        background-color: #eca539;
+        height: 30px;
+        border-radius: 5px;
+      }
+    }
+    .country {
+      width: 17%;
+    }
+    .population {
+      width: 18%;
+    }
+  }
+}

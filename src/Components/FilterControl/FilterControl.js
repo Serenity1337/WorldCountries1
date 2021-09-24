@@ -1,27 +1,7 @@
-import React, { useState, useEffect } from 'react'
-import ErrorCard from '../ErrorCard'
-import AnswerCard from '../AnswerCard'
+import React from 'react'
 import classes from './FilterControl.module.scss'
-import { countries } from '../../Utils/CountryList'
-export const FilterControl = () => {
-  const [values, setValues] = useState({
-    population: true,
-    filteredData: [],
-  })
-  useEffect(() => {
-    const valuesCopy = { ...values }
-    const countriesCopy = [...countries]
-    countriesCopy.sort(function (a, b) {
-      if (a.population > b.population) return -1
-      if (a.population < b.population) return 1
-      return 0
-    })
-    countriesCopy.splice(10, countriesCopy.length - 10)
-    countriesCopy.splice(0, 0, { name: 'World', population: 7693165599 })
-    valuesCopy.filteredData = countriesCopy
-    setValues(valuesCopy)
-  }, [])
-  console.log(values)
+
+export const FilterControl = (props) => {
   const filterLanguagesHandler = (countries) => {
     const countriesClone = [...countries]
     const allLanguages = {}
@@ -43,16 +23,15 @@ export const FilterControl = () => {
     })
     languageEntries.splice(10, languageEntries.length - 10)
     languageEntries.map((entry) => {
-      console.log(entry)
       filteredTopTenLanguages.push({ name: entry[0], amount: entry[1] })
     })
-    const valuesCopy = { ...values }
+    const valuesCopy = { ...props.values }
     valuesCopy.population = false
     valuesCopy.filteredData = filteredTopTenLanguages
-    setValues(valuesCopy)
+    props.setValues(valuesCopy)
   }
   const filteredPopulationHandler = (countries) => {
-    const valuesCopy = { ...values }
+    const valuesCopy = { ...props.values }
     const countriesCopy = [...countries]
     countriesCopy.sort(function (a, b) {
       if (a.population > b.population) return -1
@@ -63,24 +42,27 @@ export const FilterControl = () => {
     countriesCopy.splice(0, 0, { name: 'World', population: 7693165599 })
     valuesCopy.filteredData = countriesCopy
     valuesCopy.population = true
-    setValues(valuesCopy)
+    props.setValues(valuesCopy)
+    console.log(valuesCopy)
   }
   return (
     <div className={classes.filterControlContainer}>
       <div className={classes.btnContainer}>
-        <button className={classes.populationBtn}>Population</button>
+        <button
+          className={classes.populationBtn}
+          onClick={() => filteredPopulationHandler(props.countries)}
+        >
+          Population
+        </button>
         <button
           className={classes.languagesBtn}
-          onClick={() => filterLanguagesHandler(countries)}
+          onClick={() => filterLanguagesHandler(props.countries)}
         >
           Languages
         </button>
       </div>
-      {values.population ? (
-        <span
-          onClick={() => filteredPopulationHandler(countries)}
-          className={classes.filterControlSubheading}
-        >
+      {props.values.population ? (
+        <span className={classes.filterControlSubheading}>
           10 most populated countries in the world
         </span>
       ) : (
